@@ -1,2 +1,5 @@
 # CP-openGL
-OpenGL 
+
+## Precisa ter OpenGL instalado
+
+comando para executar no linux: gcc test.c -o exe -lglut -lGL
