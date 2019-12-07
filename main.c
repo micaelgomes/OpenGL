@@ -23,7 +23,7 @@ void display() {
     glRotatef(yRotated,0.0,1.0,0.0);
     glRotatef(zRotated,0.0,0.0,1.0);
     glScalef(1.0,1.0,1.0);// scaling transfomation 
-    glutSolidSphere(radius,50,50);
+    glutSolidSphere(radius,20,20);
     
     glFlush(); 
    
