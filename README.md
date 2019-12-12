@@ -1,18 +1,18 @@
 # CP-openGL
 
-Para execução da atividade foi construída uma Esfera (porém como não há iluminação não é possível ver a forma da esfera, mas é possível perceber o movimento).
+Quando a aplicação é iniciada, a camera está dentro do CUBO, pressione W, até ver completamente o CUBO para interagir.
 
-A mecânica consiste em incrementas as componente R.G.B e rotacionar a esferar em torno de um eixo
+A mecânica consiste em incrementas as componente R.G.B e variar o posicionamento da câmera em X ou Y
 
 ## comandos
 
-a -> incrementa o canal R e rotaciona em torno de X 
-s -> incrementa o canal G e rotaciona em torno de X
-d -> incrementa o canal B e rotaciona em torno de X
+a -> decrementa em X
+s -> decrementa em Y
+d -> incrementa em X
+w -> incrementa em Y
 
-shift + a -> Decrementa o canal R e rotaciona em torno de X, só que em sentido anti-horário
-shift + s -> Decrementa o canal G e rotaciona em torno de Y, só que em sentido anti-horário
-shift + d -> Decrementa o canal B e rotaciona em torno de Z, só que em sentido anti-horário
+o -> Projeção Ortogonal
+p -> Projeção perspectiva
 
 esc -> Fecha a aplicação
 
