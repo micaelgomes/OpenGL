@@ -5,6 +5,10 @@
  */
 
 #include <GL/glut.h>
+#include <stdio.h>
+
+#define true 1
+#define false 0
 
 GLfloat xRotated, yRotated, zRotated;
 GLdouble radius=1;
@@ -22,6 +26,10 @@ GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat high_shininess[] = { 100.0f }; 
 
 GLfloat none[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+int ambient = true;
+int specular = true;
+int diffuse = true;
 
 void display() {
 
@@ -45,6 +53,78 @@ void display() {
 
     glFlush(); 
    
+}
+
+void luzAmbiente(void){
+    GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0};
+    GLfloat posicaoLuz[4]={1.0, 0.0, 1.0, 0.0};
+
+    GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
+    GLint especMaterial = 60;
+
+    glClearColor(1,1,1,1);
+
+    glShadeModel(GL_SMOOTH);
+
+    glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+    glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
+
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
+    glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);
+}
+
+void luzDifusa (void){
+    GLfloat luzDifusa[4]={0.5,0.5,0.5,0.0};
+    GLfloat posicaoLuz[4]={1.0, 0.0, 1.0, 0.0};
+
+    GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
+    GLint especMaterial = 60;
+
+    glClearColor(1,1,1,1);
+
+    glShadeModel(GL_SMOOTH);
+
+    glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+
+    glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
+
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, luzDifusa);
+    glLightfv(GL_LIGHT1, GL_POSITION, posicaoLuz);
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_DEPTH_TEST);
+}
+
+void luzEspecular(void){
+    GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};
+    GLfloat posicaoLuz[4]={1.0, 0.0, 1.0, 0.0};
+
+    GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
+    GLint especMaterial = 60;
+
+    glClearColor(1,1,1,1);
+
+    glShadeModel(GL_SMOOTH);
+
+    glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+    glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
+
+    glLightfv(GL_LIGHT2, GL_SPECULAR, luzEspecular );
+    glLightfv(GL_LIGHT2, GL_POSITION, posicaoLuz );
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT2);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void keyboard (unsigned char key, int x, int y){
@@ -86,17 +166,35 @@ void keyboard (unsigned char key, int x, int y){
         else zRotated = 360.0;
         break;
     case 'j':
-        // glDisable(GL_LIGHT0);
-        
-
-        glLightfv(GL_LIGHT0, GL_AMBIENT, none);
-        glMaterialfv(GL_FRONT, GL_AMBIENT, none);
-
-        glEnable(GL_LIGHT0);
+        if(ambient) ambient = false;
+        else ambient = true;
+        glDisable(GL_LIGHT1);
+        glDisable(GL_LIGHT2);
+        luzAmbiente();
+        glutPostRedisplay();
+        printf("Ambient\n");
         break;
     case 'k':
+        if(specular) specular = false;
+        else specular = true;
+        glDisable(GL_LIGHT0);
+        glDisable(GL_LIGHT1);
+        luzEspecular();
+        glutPostRedisplay();
+        printf("Specular\n");
         break;
     case 'l':
+        if(diffuse) diffuse = false;
+        else diffuse = true;
+        glDisable(GL_LIGHT0);
+        glDisable(GL_LIGHT2);
+        luzDifusa();
+        glutPostRedisplay();
+        printf("Diffuse\n");
+        break;
+    case '0':
+        red = green = blue = 0.0;
+        printf("ZERO\n");
         break;
     case 27:
         exit(0);
@@ -104,6 +202,7 @@ void keyboard (unsigned char key, int x, int y){
     default:
         break;
   }
+  
   glutPostRedisplay();
 }
 
@@ -114,50 +213,26 @@ void init(int x, int y) {
 
     glMatrixMode(GL_PROJECTION);  
     glLoadIdentity(); 
-    gluPerspective(39.0,(GLdouble)x/(GLdouble)y,0.6,21.0);
+    gluPerspective(39.0, (GLdouble)x/(GLdouble)y,0.6,21.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); 
     glViewport(0,0,x,y);
-
-    // set Light
-    glClearColor(1,1,1,1);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK); 
- 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS); 
- 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING); 
- 
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position); 
- 
-    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-
 }
 
 int main (int argc, char **argv) {
     glutInit(&argc, argv); 
     glutInitWindowSize(500,500);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); 
+    glutInitDisplayMode(GLUT_RGB); 
     glutCreateWindow("MyApp");
     
     xRotated = yRotated = zRotated = 30.0;
-    xRotated=43;
-    yRotated=50;
+    xRotated = 43;
+    yRotated = 50;
  
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
     glutReshapeFunc(init);
-    
+    luzAmbiente();
     glutMainLoop();
 
     return 0;
